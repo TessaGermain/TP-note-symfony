@@ -41,9 +41,9 @@ class Album
     private ?Artist $artist = null;
 
     /**
-     * @var Collection<int, song>
+     * @var Collection<int, Song>
      */
-    #[ORM\OneToMany(targetEntity: song::class, mappedBy: 'album', orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: Song::class, mappedBy: 'album', orphanRemoval: true)]
     private Collection $songs;
 
     public function __construct()
@@ -141,14 +141,14 @@ class Album
     }
 
     /**
-     * @return Collection<int, song>
+     * @return Collection<int, Song>
      */
     public function getSongs(): Collection
     {
         return $this->songs;
     }
 
-    public function addSong(song $song): static
+    public function addSong(Song $song): static
     {
         if (!$this->songs->contains($song)) {
             $this->songs->add($song);
@@ -158,7 +158,7 @@ class Album
         return $this;
     }
 
-    public function removeSong(song $song): static
+    public function removeSong(Song $song): static
     {
         if ($this->songs->removeElement($song)) {
             // set the owning side to null (unless already changed)

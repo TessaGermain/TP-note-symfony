@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %} {% block title %}{{song.title}}{% endblock %} 
+{% block body %}
+<a class="text-teal-500 underline font-semibold p-6 mt-6" href="{{ path('all-songs') }}">< Retourner à liste</a>
+<div class="flex p-6 justify-start gap-10">
+  <img
+    src="{{ song.album.image }}"
+    alt="{{song.title}}"
+    class="w-40 bg-amber-200 rounded-md"
+  />
+  <div class="w-2/5">
+    <h1 class="text-2xl font-extrabold my-5">{{song.title|upper}}</h1>
+    <h3 class="font-medium text-teal-950">
+      {{song.artist.name}} · {% set minutes = song.duration // 60 %} {% set secondes = song.duration % 60 %}
+        {{ minutes }}min{{ secondes }}s
+    </h3>
+    <span class="text-sm text-teal-900 font-medium">
+      {{song.album.releaseDate|date('d/m/Y')}} · {{song.language.value}} · {{song.genre.name}}
+    </span>
+  </div>
+</div>
+{% endblock %}

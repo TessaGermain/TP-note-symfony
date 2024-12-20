@@ -18,7 +18,7 @@ class AppFixtures extends Fixture
 {
     public function load(ObjectManager $manager): void
     {
-        $faker = Factory::create();
+        $faker = Factory::create('fr_FR');
 
         // Genres
         $genres = [];
@@ -36,7 +36,7 @@ class AppFixtures extends Fixture
             $artist = new Artist();
             $artist->setName($faker->name);
             $artist->setBirthdate($faker->dateTimeBetween('-50 years', '-20 years'));
-            $artist->setPhoto($faker->imageUrl(200, 200, 'people'));
+            $artist->setPhoto($faker->imageUrl(100, 100, 'people'));
             $artist->setBiography($faker->text);
             $manager->persist($artist);
             $artists[] = $artist;
@@ -46,9 +46,9 @@ class AppFixtures extends Fixture
         $albums = [];
         for ($i = 0; $i < 10; $i++) {
             $album = new Album();
-            $album->setTitle($faker->sentence(3));
+            $album->setTitle($faker->words($faker->numberBetween(1, 5), true));
             $album->setReleaseDate($faker->dateTimeBetween('-10 years', 'now'));
-            $album->setImage($faker->imageUrl(300, 300, 'music'));
+            $album->setImage($faker->imageUrl(100, 100, 'music'));
             $album->setDescription($faker->paragraph);
             $album->setLanguage($faker->randomElement(LanguageEnum::cases()));
             $album->setGenre($faker->randomElement($genres));
@@ -61,7 +61,7 @@ class AppFixtures extends Fixture
         $songs = [];
         for ($i = 0; $i < 50; $i++) {
             $song = new Song();
-            $song->setTitle($faker->sentence(3));
+            $song->setTitle($faker->words($faker->numberBetween(1, 5), true));
             $song->setDuration($faker->numberBetween(120, 360));
             $song->setLanguage($faker->randomElement(LanguageEnum::cases()));
             $song->setGenre($faker->randomElement($genres));
@@ -89,7 +89,7 @@ class AppFixtures extends Fixture
         $playlists = [];
         for ($i = 0; $i < 10; $i++) {
             $playlist = new Playlist();
-            $playlist->setTitle($faker->sentence(3));
+            $playlist->setTitle($faker->words($faker->numberBetween(1, 10), true));
             $playlist->setDescription($faker->paragraph);
             $playlist->setCreationDate($faker->dateTimeBetween('-5 years', 'now'));
             $playlist->setUser($faker->randomElement($users));
