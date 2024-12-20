@@ -19,17 +19,8 @@ class SongType extends AbstractType
         $builder
             ->add('title')
             ->add('duration')
-            ->add('language')
             ->add('album', EntityType::class, [
                 'class' => Album::class,
-                'choice_label' => 'id',
-            ])
-            ->add('genre', EntityType::class, [
-                'class' => Genre::class,
-                'choice_label' => 'id',
-            ])
-            ->add('artist', EntityType::class, [
-                'class' => Artist::class,
                 'choice_label' => 'id',
             ])
             ->add('playlists', EntityType::class, [

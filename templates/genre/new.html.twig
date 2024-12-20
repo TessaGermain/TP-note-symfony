@@ -1,11 +1,8 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}New Genre{% endblock %}
+{% block title %}Ajouter un genre{% endblock %}
 
 {% block body %}
-    <h1>Create new Genre</h1>
-
-    {{ include('genre/_form.html.twig') }}
-
-    <a href="{{ path('all-genres') }}">back to list</a>
+<h1 class="text-xl font-bold text-center text-teal-900 my-6">Ajouter un genre</h1>
+    {% include './genre/_form.html.twig' %}
 {% endblock %}
