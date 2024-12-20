@@ -1,13 +1,15 @@
-{% extends 'base.html.twig' %} {% block title %}Toutes les chansons{% endblock %}
+{% extends 'base.html.twig' %} 
+{% block title %}Tous les genres{% endblock %} 
 {% block body %}
-<h1 class="text-center text-2xl font-extrabold my-5">Toutes les chansons</h1>
-
-<div class="grid grid-cols-4 gap-4 px-6">
-  {% for song in songs %}
-  <div class="p-4 rounded-lg bg-cyan-200/50 border-2 border-teal-700 relative">
-    <div class="absolute top-2 right-2 flex gap-2">
+<h1 class="text-center text-2xl font-extrabold my-5">Tous les genres</h1>
+<div class="grid grid-cols-5 gap-4 px-6">
+  {% for genre in genres %}
+  <div
+    class="p-8 rounded-lg bg-cyan-200/50 border-2 border-teal-700 relative flex justify-center items-center gap-4 flex-col"
+  >
+    <div class="absolute top-2 right-2 flex gap-1">
       <a
-        href="{{ path('song-edit', {'id': song.id}) }}"
+        href="{{ path('genre-edit', {'id': genre.id}) }}"
         class="p-1 rounded-md bg-green-400"
         ><svg
           xmlns="http://www.w3.org/2000/svg"
@@ -21,7 +23,7 @@
         </svg>
       </a>
       <a
-        href="{{ path('song-delete', {'id': song.id}) }}"
+        href="{{ path('genre-delete', {'id': genre.id}) }}"
         class="p-1 rounded-md bg-red-400"
       >
         <svg
@@ -38,28 +40,18 @@
         </svg>
       </a>
     </div>
-    <img
-      src="{{ song.album.image }}"
-      alt="{{song.title}}"
-      class="w-40 mx-auto bg-amber-200 rounded-md"
-    />
-    <div class="mx-auto flex flex-col gap-1">
-      <h2 class="text-lg text-center font-bold text-teal-700">
-        {{song.title|upper}}
-      </h2>
-      <h3 class="text-center font-medium text-teal-950">
-        {{song.album.artist.name}} · {% set minutes = song.duration // 60 %} {% set secondes = song.duration % 60 %}
-        {{ minutes }}min{{ secondes }}s
-      </h3>
-      <span class="flex text-sm text-teal-900 font-medium justify-center"
-        >{{song.album.releaseDate|date('d/m/Y')}} · {{song.album.language.value}} ·
-        {{song.album.genre.name}}</span
+    <h2 class="text-2xl font-bold text-teal-700">{{genre.name}}</h2>
+    <div class="flex flex-col gap-1">
+      <span class="text-sm text-teal-700">{{genre.albums|length}} albums · {{genre.getSongsCount()}} chansons</span>
+      <a
+        class="text-teal-500 underline text-center font-bold"
+        href="{{ path('genre-show', {'id': genre.id}) }}"
+        >Voir</a
       >
-      <a class="text-teal-500 underline text-center" href="{{ path('song-show', {'id': song.id}) }}">+ de détails</a>
     </div>
   </div>
   {% else %}
-  <span>Aucune chanson trouvé</span>
-  {% endfor %}
+  <span>Aucun genre</span>
+  {% endfor %} 
 </div>
 {% endblock %}

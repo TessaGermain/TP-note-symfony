@@ -1,29 +1,17 @@
-{% extends 'base.html.twig' %} {% block title %}{{artist.name}}{% endblock %} {%
-block body %}
+{% extends 'base.html.twig' %}
+{% block title %}{{genre.name}}{% endblock %} 
+{% block body %}
 <a
   class="text-teal-500 underline font-semibold p-6 mt-6"
-  href="{{ path('all-artists') }}"
+  href="{{ path('all-genres') }}"
   >< Retourner à liste</a
 >
-<div class="flex p-6 justify-start gap-10">
-  <img
-    src="{{ artist.photo }}"
-    alt="{{artist.name}}"
-    class="w-40 bg-amber-200 rounded-md"
-  />
-  <div class="w-2/5">
-    <h1 class="text-2xl font-extrabold my-5">{{artist.name|upper}}</h1>
-    <span class="font-medium text-teal-950">
-      {{artist.birthdate|date('d/m/Y')}}
-    </span>
-    <p class="text-sm text-justify">{{artist.biography}}</p>
-  </div>
-</div>
-<div class="p-6 flex gap-16">
-  <div>
-    <h2 class="text-xl text-teal-800 font-bold">Tous ses albums</h2>
+<h1 class="text-2xl text-teal-900 font-bold text-center p-6">{{genre.name}}</h1>
+<div class="px-6 flex gap-16">
+  <div class="w-1/2">
+    <h2 class="text-xl text-teal-800 font-bold text-center">Tous les albums</h2>
     <ul class="mt-5">
-      {% for album in artist.albums %}
+      {% for album in genre.albums %}
       <li class="flex gap-4 items-center py-1">
         <span>
         <a
@@ -42,10 +30,10 @@ block body %}
       {% endfor %}
     </ul>
   </div>
-  <div>
-    <h2 class="text-xl text-teal-800 font-bold">Toutes ses chansons</h2>
+  <div class="w-1/2">
+    <h2 class="text-xl text-teal-800 font-bold text-center">Toutes les chansons</h2>
     <ul class="mt-5">
-      {% for album in artist.albums %}
+      {% for album in genre.albums %}
         {% for song in album.songs %}
         <li class="flex gap-4 items-center py-1">
           <span>

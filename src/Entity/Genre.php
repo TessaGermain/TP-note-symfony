@@ -112,4 +112,13 @@ class Genre
 
         return $this;
     }
+
+    public function getSongsCount(): ?int 
+    {
+        $songCount = 0;
+        foreach ($this->albums as $album) {
+            $songCount += $album->getSongs()->count();
+        }
+        return $songCount;
+    }
 }

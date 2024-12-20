@@ -6,6 +6,7 @@ use App\Enum\LanguageEnum;
 use App\Repository\SongRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: SongRepository::class)]
@@ -22,20 +23,9 @@ class Song
     #[ORM\Column]
     private ?int $duration = null;
 
-    #[ORM\Column(enumType: LanguageEnum::class)]
-    private ?LanguageEnum $language = null;
-
     #[ORM\ManyToOne(inversedBy: 'songs')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Album $album = null;
-
-    #[ORM\ManyToOne(inversedBy: 'songs')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?Genre $genre = null;
-
-    #[ORM\ManyToOne(inversedBy: 'songs')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?Artist $artist = null;
 
     /**
      * @var Collection<int, Comment>
@@ -49,6 +39,9 @@ class Song
      */
     #[ORM\ManyToMany(targetEntity: Playlist::class, mappedBy: 'songs')]
     private Collection $playlists;
+
+    #[ORM\Column(type: Types::ARRAY, nullable: true)]
+    private ?array $contributors = null;
 
     public function __construct()
     {
@@ -85,18 +78,6 @@ class Song
         return $this;
     }
 
-    public function getLanguage(): ?LanguageEnum
-    {
-        return $this->language;
-    }
-
-    public function setLanguage(LanguageEnum $language): static
-    {
-        $this->language = $language;
-
-        return $this;
-    }
-
     public function getAlbum(): ?Album
     {
         return $this->album;
@@ -105,30 +86,6 @@ class Song
     public function setAlbum(?Album $album): static
     {
         $this->album = $album;
-
-        return $this;
-    }
-
-    public function getGenre(): ?Genre
-    {
-        return $this->genre;
-    }
-
-    public function setGenre(?Genre $genre): static
-    {
-        $this->genre = $genre;
-
-        return $this;
-    }
-
-    public function getArtist(): ?Artist
-    {
-        return $this->artist;
-    }
-
-    public function setArtist(?Artist $artist): static
-    {
-        $this->artist = $artist;
 
         return $this;
     }
@@ -188,5 +145,33 @@ class Song
         }
 
         return $this;
+    }
+
+    public function getContributors(): ?array
+    {
+        return $this->contributors;
+    }
+
+    public function setContributors(?array $contributors): static
+    {
+        $this->contributors = $contributors;
+
+        return $this;
+    }
+
+    public function getDurationInMinutes(): ?string
+    {
+        $minutes = intdiv($this->duration, 60);
+        $seconds = $this->duration % 60;
+        return "{$minutes}min{$seconds}s";
+    }
+
+    public function getAverage(): ?int
+    {
+        $average = 0;
+        foreach($this->comments as $comment) {
+            $average += $comment->getNote();
+        }
+        return $this->comments->count() > 0 ? round($average / $this->comments->count(), 2) : null;
     }
 }

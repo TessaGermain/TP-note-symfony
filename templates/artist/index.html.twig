@@ -48,7 +48,7 @@
         {{artist.name|upper}}
       </h2>
       <h3 class="text-center font-medium text-teal-950">
-        {{artist.albums|length}} albums · {{ artist.songs|length }} chansons
+        {{artist.albums|length}} albums · {{ artist.getSongsCount() }} chansons
       </h3>
       <a class="text-teal-500 underline text-center" href="{{ path('artist-show', {'id': artist.id}) }}">+ de détails</a>
     </div>

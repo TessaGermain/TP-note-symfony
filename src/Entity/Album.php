@@ -169,4 +169,15 @@ class Album
 
         return $this;
     }
+
+    public function getTotalDuration(): ?string
+    {
+        $totalDuration = 0;
+        foreach ($this->songs as $song) {
+            $totalDuration += $song->getDuration();
+        }
+        $minutes = intdiv($totalDuration, 60);
+        $seconds = $totalDuration % 60;
+        return "{$minutes}min{$seconds}s";
+    }
 }

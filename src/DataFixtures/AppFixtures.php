@@ -22,7 +22,7 @@ class AppFixtures extends Fixture
 
         // Genres
         $genres = [];
-        $genreTypes = ['Rock', 'Jazz', 'Pop', 'Hip-hop', 'Classique', 'Rap'];
+        $genreTypes = ['Rock', 'Jazz', 'Pop', 'Hip-hop', 'Classique', 'Rap', 'Électronique', 'Country', 'Métal', 'Blues'];
         foreach ($genreTypes as $type) {
             $genre = new Genre();
             $genre->setName($type);
@@ -32,7 +32,7 @@ class AppFixtures extends Fixture
 
         // Artists
         $artists = [];
-        for ($i = 0; $i < 10; $i++) {
+        for ($i = 0; $i < 15; $i++) {
             $artist = new Artist();
             $artist->setName($faker->name);
             $artist->setBirthdate($faker->dateTimeBetween('-50 years', '-20 years'));
@@ -44,10 +44,10 @@ class AppFixtures extends Fixture
 
         // Albums
         $albums = [];
-        for ($i = 0; $i < 10; $i++) {
+        for ($i = 0; $i < 30; $i++) {
             $album = new Album();
             $album->setTitle($faker->words($faker->numberBetween(1, 5), true));
-            $album->setReleaseDate($faker->dateTimeBetween('-10 years', 'now'));
+            $album->setReleaseDate($faker->dateTimeBetween('-20 years', 'now'));
             $album->setImage($faker->imageUrl(100, 100, 'music'));
             $album->setDescription($faker->paragraph);
             $album->setLanguage($faker->randomElement(LanguageEnum::cases()));
@@ -59,14 +59,22 @@ class AppFixtures extends Fixture
 
         // Songs
         $songs = [];
-        for ($i = 0; $i < 50; $i++) {
+        for ($i = 0; $i < 100; $i++) {
             $song = new Song();
             $song->setTitle($faker->words($faker->numberBetween(1, 5), true));
-            $song->setDuration($faker->numberBetween(120, 360));
-            $song->setLanguage($faker->randomElement(LanguageEnum::cases()));
-            $song->setGenre($faker->randomElement($genres));
+            $song->setDuration($faker->numberBetween(75, 360));
             $song->setAlbum($faker->randomElement($albums));
-            $song->setArtist($faker->randomElement($artists));
+            $contributors = [];
+            $length = $faker->numberBetween(0, 5);
+            if ($length != 0) {
+                for ($j = 0; $j < $length; $j++) {
+                    $contributors[] = $faker->name;
+                }    
+            }
+            else {
+                $contributors = null;
+            }
+            $song->setContributors($contributors);
             $manager->persist($song);
             $songs[] = $song;
         }
@@ -87,7 +95,7 @@ class AppFixtures extends Fixture
 
         // Playlists
         $playlists = [];
-        for ($i = 0; $i < 10; $i++) {
+        for ($i = 0; $i < 20; $i++) {
             $playlist = new Playlist();
             $playlist->setTitle($faker->words($faker->numberBetween(1, 10), true));
             $playlist->setDescription($faker->paragraph);
@@ -98,7 +106,7 @@ class AppFixtures extends Fixture
         }
 
         // Comments
-        for ($i = 0; $i < 50; $i++) {
+        for ($i = 0; $i < 150; $i++) {
             $comment = new Comment();
             $comment->setContent($faker->paragraph);
             $comment->setPublicationDate($faker->dateTimeBetween('-1 year', 'now'));
