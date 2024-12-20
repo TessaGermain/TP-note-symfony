@@ -1,13 +1,13 @@
-{% extends 'base.html.twig' %} {% block title %}Toutes les chansons{% endblock %}
+{% extends 'base.html.twig' %} {% block title %}Tous les artistes{% endblock %}
 {% block body %}
-<h1 class="text-center text-2xl font-extrabold my-5">Toutes les chansons</h1>
+<h1 class="text-center text-2xl font-extrabold my-5">Tous les artistes</h1>
 
 <div class="grid grid-cols-4 gap-4 px-6">
-  {% for song in songs %}
+  {% for artist in artists %}
   <div class="p-4 rounded-lg bg-cyan-200/50 border-2 border-teal-700 relative">
     <div class="absolute top-2 right-2 flex gap-2">
       <a
-        href="{{ path('song-edit', {'id': song.id}) }}"
+        href="{{ path('artist-edit', {'id': artist.id}) }}"
         class="p-1 rounded-md bg-green-400"
         ><svg
           xmlns="http://www.w3.org/2000/svg"
@@ -21,7 +21,7 @@
         </svg>
       </a>
       <a
-        href="{{ path('song-delete', {'id': song.id}) }}"
+        href="{{ path('artist-delete', {'id': artist.id}) }}"
         class="p-1 rounded-md bg-red-400"
       >
         <svg
@@ -39,27 +39,22 @@
       </a>
     </div>
     <img
-      src="{{ song.album.image }}"
-      alt="{{song.title}}"
+      src="{{ artist.photo }}"
+      alt="{{artist.name}}"
       class="w-40 mx-auto bg-amber-200 rounded-md"
     />
     <div class="mx-auto flex flex-col gap-1">
       <h2 class="text-lg text-center font-bold text-teal-700">
-        {{song.title|upper}}
+        {{artist.name|upper}}
       </h2>
       <h3 class="text-center font-medium text-teal-950">
-        {{song.artist.name}} · {% set minutes = song.duration // 60 %} {% set secondes = song.duration % 60 %}
-        {{ minutes }}min{{ secondes }}s
+        {{artist.albums|length}} albums · {{ artist.songs|length }} chansons
       </h3>
-      <span class="flex text-sm text-teal-900 font-medium justify-center"
-        >{{song.album.releaseDate|date('d/m/Y')}} · {{song.language.value}} ·
-        {{song.genre.name}}</span
-      >
-      <a class="text-teal-500 underline text-center" href="{{ path('song-show', {'id': song.id}) }}">+ de détails</a>
+      <a class="text-teal-500 underline text-center" href="{{ path('artist-show', {'id': artist.id}) }}">+ de détails</a>
     </div>
   </div>
   {% else %}
-  <span>Aucune chanson trouvé</span>
+  <span>Aucun artiste trouvé</span>
   {% endfor %}
 </div>
 {% endblock %}
