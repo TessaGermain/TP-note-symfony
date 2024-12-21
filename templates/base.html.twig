@@ -13,11 +13,16 @@
     <script src="https://cdn.tailwindcss.com"></script>
   </head>
   <body class="h-full">
-    <div class="flex">
-      {% include './components/left-nav.html.twig' %}
-      <div class="w-5/6">
-        {% block body %}{% endblock %}
+    {% if is_granted('ROLE_BANNED') %}
+      {% include './components/unauthorized.html.twig' %}
+      <a class="underline text-red-700 text-center mx-auto block" href="{{path('app_logout')}}">Se déconnecter</a>
+    {% else %}
+      <div class="flex">
+        {% include './components/left-nav.html.twig' %}
+        <div class="w-5/6">
+          {% block body %}{% endblock %}
+        </div>
       </div>
-    </div>
+    {% endif %}
   </body>
 </html>

@@ -10,6 +10,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\ExpressionLanguage\Expression;
 
 #[Route('/genre')]
 final class GenreController extends AbstractController
@@ -17,6 +18,10 @@ final class GenreController extends AbstractController
     #[Route(name: 'all-genres', methods: ['GET'])]
     public function index(GenreRepository $genreRepository): Response
     {
+        $this->denyAccessUnlessGranted(new Expression(
+            'is_granted("ROLE_USER")'
+        ));
+
         return $this->render('genre/index.html.twig', [
             'genres' => $genreRepository->findAll(),
         ]);
@@ -25,6 +30,10 @@ final class GenreController extends AbstractController
     #[Route('/new', name: 'genre-add', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
+        $this->denyAccessUnlessGranted(new Expression(
+            'is_granted("ROLE_ADMIN")'
+        ));
+
         $genre = new Genre();
         $form = $this->createForm(GenreType::class, $genre);
         $form->handleRequest($request);
@@ -45,6 +54,10 @@ final class GenreController extends AbstractController
     #[Route('/{id}', name: 'genre-show', methods: ['GET'])]
     public function show(Genre $genre): Response
     {
+        $this->denyAccessUnlessGranted(new Expression(
+            'is_granted("ROLE_USER")'
+        ));
+
         return $this->render('genre/show.html.twig', [
             'genre' => $genre,
         ]);
@@ -53,6 +66,10 @@ final class GenreController extends AbstractController
     #[Route('/{id}/edit', name: 'genre-edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Genre $genre, EntityManagerInterface $entityManager): Response
     {
+        $this->denyAccessUnlessGranted(new Expression(
+            'is_granted("ROLE_ADMIN")'
+        ));
+
         $form = $this->createForm(GenreType::class, $genre);
         $form->handleRequest($request);
 
@@ -71,6 +88,10 @@ final class GenreController extends AbstractController
     #[Route('/{id}', name: 'genre-delete', methods: ['POST'])]
     public function delete(Request $request, Genre $genre, EntityManagerInterface $entityManager): Response
     {
+        $this->denyAccessUnlessGranted(new Expression(
+            'is_granted("ROLE_ADMIN")'
+        ));
+
         if ($this->isCsrfTokenValid('delete'.$genre->getId(), $request->getPayload()->getString('_token'))) {
             $entityManager->remove($genre);
             $entityManager->flush();

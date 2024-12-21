@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %} {% block title %}Accueil{% endblock %} {% block
+body %}
+<div class="p-6">
+  <div class="mb-4">
+    <h2 class="text-2xl font-bold text-teal-800 mb-5">Les chansons</h2>
+    <div class="grid grid-cols-5 gap-3">
+      {% for song in songs %}
+        {% include './components/song-card.html.twig' %}
+      {% endfor %}
+    </div>
+  </div>
+    <div class="mb-4">
+    <h2 class="text-2xl font-bold text-teal-800 mb-5">Les albums</h2>
+    <div class="grid grid-cols-5 gap-3">
+      {% for album in albums %}
+        {% include './components/album-card.html.twig' %}
+      {% endfor %}
+    </div>
+  </div>
+  <div class="mb-4">
+    <h2 class="text-2xl font-bold text-teal-800 mb-5">Les artistes</h2>
+    <div class="grid grid-cols-5 gap-3">
+      {% for artist in artists %}
+        {% include './components/artist-card.html.twig' %}
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+{% endblock %}

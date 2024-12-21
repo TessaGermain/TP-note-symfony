@@ -13,9 +13,17 @@ use App\Enum\LanguageEnum;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Faker\Factory;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class AppFixtures extends Fixture
 {
+    private UserPasswordHasherInterface $passwordHasher;
+
+    public function __construct(UserPasswordHasherInterface $passwordHasher)
+    {
+        $this->passwordHasher = $passwordHasher;
+    }
+
     public function load(ObjectManager $manager): void
     {
         $faker = Factory::create('fr_FR');
@@ -32,7 +40,7 @@ class AppFixtures extends Fixture
 
         // Artists
         $artists = [];
-        for ($i = 0; $i < 15; $i++) {
+        for ($i = 0; $i < 20; $i++) {
             $artist = new Artist();
             $artist->setName($faker->name);
             $artist->setBirthdate($faker->dateTimeBetween('-50 years', '-20 years'));
@@ -80,8 +88,48 @@ class AppFixtures extends Fixture
         }
 
         // Users
-        //TODO: Refaire correctement les users après implémentation du login
         $users = [];
+
+        //banned user
+        $user = new User();
+        $user->setEmail("banned@gmail.com");
+        $user->setRoles(['ROLE_BANNED']);
+        $user->setPassword($this->passwordHasher->hashPassword($user, 'banned'));
+        $user->setName('Test');
+        $user->setLastName('Banned');
+        $manager->persist($user);
+        $users[] = $user;
+
+        // basic user
+        $user = new User();
+        $user->setEmail("tessa.germain2003@gmail.com");
+        $user->setRoles(['ROLE_USER']);
+        $user->setPassword($this->passwordHasher->hashPassword($user, 'user'));
+        $user->setName('Test');
+        $user->setLastName('User');
+        $manager->persist($user);
+        $users[] = $user;
+
+        // artist
+        $user = new User();
+        $user->setEmail("artist@gmail.com");
+        $user->setRoles(['ROLE_ARTIST']);
+        $user->setPassword($this->passwordHasher->hashPassword($user, 'artist'));
+        $user->setName('Test');
+        $user->setLastName('Artist');
+        $manager->persist($user);
+        $users[] = $user;
+
+        //admin
+        $user = new User();
+        $user->setEmail("admin@gmail.com");
+        $user->setRoles(['ROLE_ADMIN']);
+        $user->setPassword($this->passwordHasher->hashPassword($user, 'admin'));
+        $user->setName('Test');
+        $user->setLastName('Admin');
+        $manager->persist($user);
+        $users[] = $user;
+
         for ($i = 0; $i < 10; $i++) {
             $user = new User();
             $user->setEmail($faker->unique()->email);
@@ -114,6 +162,21 @@ class AppFixtures extends Fixture
             $comment->setUser($faker->randomElement($users));
             $comment->setSong($faker->randomElement($songs));
             $manager->persist($comment);
+        }
+
+        // Populate playlist
+        foreach ($playlists as $playlist) {
+            $numberOfSongs = $faker->numberBetween(5, 20);
+
+            for ($i = 0; $i < $numberOfSongs; $i++) {
+                $song = $faker->randomElement($songs);
+
+                if (!$playlist->getSongs()->contains($song)) {
+                    $playlist->addSong($song);
+                }
+            }
+
+            $manager->persist($playlist);
         }
 
         $manager->flush();

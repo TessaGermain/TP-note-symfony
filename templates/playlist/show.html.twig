@@ -1,0 +1,34 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Playlist{% endblock %}
+
+{% block body %}
+    <h1>Playlist</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ playlist.id }}</td>
+            </tr>
+            <tr>
+                <th>Title</th>
+                <td>{{ playlist.title }}</td>
+            </tr>
+            <tr>
+                <th>Description</th>
+                <td>{{ playlist.description }}</td>
+            </tr>
+            <tr>
+                <th>Creation_date</th>
+                <td>{{ playlist.creationDate ? playlist.creationDate|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('playlists') }}">back to list</a>
+
+    <a href="{{ path('playlist-edit', {'id': playlist.id}) }}">edit</a>
+
+    {{ include('playlist/_delete_form.html.twig') }}
+{% endblock %}
